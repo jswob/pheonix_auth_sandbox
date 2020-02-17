@@ -21,6 +21,7 @@ defmodule PhoenixAuthSandbox.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+      import PhoenixAuthSandbox.TestHelpers
       import PhoenixAuthSandbox.DataCase
     end
   end
