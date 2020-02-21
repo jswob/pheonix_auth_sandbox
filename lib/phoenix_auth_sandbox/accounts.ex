@@ -56,6 +56,24 @@ defmodule PhoenixAuthSandbox.Accounts do
   end
 
   @doc """
+  Registers a user.
+
+  ## Examples
+
+      iex> register_user(%{field: value})
+      {:ok, %User{}}
+
+      iex> register_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def register_user(attrs \\ %{}) do
+    %User{}
+    |> User.register_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Updates a user.
 
   ## Examples
@@ -100,5 +118,45 @@ defmodule PhoenixAuthSandbox.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user changes.
+
+  ## Examples
+
+      iex> change_registration(user, %{password: "New123"})
+      %Ecto.Changeset{source: %User{}}
+
+  """
+  def change_registration(%User{} = user, params) do
+    User.register_changeset(user, params)
+  end
+
+  @doc """
+  Returns `{:ok, %Accounts.User{}}` tuple if password is correct for
+  given username. If not return error tuple.
+
+  ## Examples
+
+    iex> check_users_pass(username: "john", password: "Good123")
+    {:ok, %Accounts.User{username: "john"}}
+
+    iex> check_users_pass(username: "Bad", password: "Badpass123")
+    {:error, :unauthorized}
+  """
+  def check_users_pass(username, pass) do
+    user = Repo.get_by(User, %{username: username})
+
+    cond do
+      user && Pbkdf2.verify_pass(pass, user.password_hash) ->
+        {:ok, user}
+
+      user ->
+        {:error, :unauthorized}
+
+      true ->
+        {:error, :not_found}
+    end
   end
 end
