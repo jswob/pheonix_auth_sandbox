@@ -74,6 +74,24 @@ defmodule PhoenixAuthSandbox.Accounts do
   end
 
   @doc """
+  Updates a user if password was changed.
+
+  ## Examples
+
+      iex> update_user(user, %{password: new_value})
+      {:ok, %User{}}
+
+      iex> update_user(user, %{password: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user(%User{} = user, %{password: _password} = attrs) do
+    user
+    |> change_registration(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Updates a user.
 
   ## Examples
@@ -87,7 +105,7 @@ defmodule PhoenixAuthSandbox.Accounts do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> change_registration(attrs)
+    |> User.changeset(attrs)
     |> Repo.update()
   end
 

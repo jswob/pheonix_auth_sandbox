@@ -44,11 +44,26 @@ defmodule PhoenixAuthSandbox.AccountsTest do
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
+
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
 
       assert user.name == "some updated name"
       assert user.username == "updated username"
       assert user.password == "some updated password"
+    end
+
+    test "update_user/2 updates user correctly if password was not changed" do
+      user = user_fixture()
+
+      assert {:ok, %User{} = user} =
+               Accounts.update_user(user, %{
+                 name: "some updated name",
+                 username: "updated username"
+               })
+
+      assert user.name == "some updated name"
+      assert user.username == "updated username"
+      assert user.password == nil
     end
 
     test "update_user/2 with invalid data returns error changeset" do
