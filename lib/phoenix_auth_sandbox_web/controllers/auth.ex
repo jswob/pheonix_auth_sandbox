@@ -7,9 +7,6 @@ defmodule PhoenixAuthSandboxWeb.Auth do
   def call(conn, _opts) do
     user_id = get_session(conn, :user_id)
 
-    require IEx
-    IEx.pry()
-
     cond do
       conn.assigns[:current_user] ->
         conn
