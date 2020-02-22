@@ -10,6 +10,13 @@ defmodule PhoenixAuthSandboxWeb.SessionControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
+  test "requires user authentication on :delete action", %{conn: conn} do
+    conn = delete(conn, Routes.user_path(conn, :delete, "123"))
+
+    assert json_response(conn, 401)
+    assert conn.halted
+  end
+
   describe "create session" do
     setup [:create_user]
 
