@@ -1,11 +1,5 @@
 defmodule PhoenixAuthSandboxWeb.SessionControllerTest do
   use PhoenixAuthSandboxWeb.ConnCase, async: true
-  import Phoenix.Controller
-
-  @valid_params %{
-    username: "some username",
-    password: "some password"
-  }
 
   @bad_params %{
     username: "wrong username",
@@ -21,16 +15,18 @@ defmodule PhoenixAuthSandboxWeb.SessionControllerTest do
 
     test "creates session with valid user data if params correct", %{
       conn: conn,
-      user: %{password_hash: pwh, id: id} = user
+      user: %{id: id, password_hash: pwh} = user
     } do
-      conn = post(conn, Routes.session_path(conn, :create), session: @valid_params)
+      conn =
+        post(conn, Routes.session_path(conn, :create),
+          session: %{username: user.username, password: "some password"}
+        )
 
       assert id == get_session(conn, :user_id)
 
       assert %{
                "id" => ^id,
                "name" => "some name",
-               "username" => "some username",
                "password_hash" => ^pwh
              } = json_response(conn, 200)
     end
@@ -50,7 +46,7 @@ defmodule PhoenixAuthSandboxWeb.SessionControllerTest do
       {:ok, conn: conn, user: user}
     end
 
-    test "deletes current session", %{conn: conn, user: user} do
+    test "deletes current session", %{conn: conn} do
       conn = delete(conn, Routes.session_path(conn, :delete))
 
       assert nil == conn.assigns[:current_user]
