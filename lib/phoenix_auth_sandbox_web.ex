@@ -23,6 +23,7 @@ defmodule PhoenixAuthSandboxWeb do
 
       import Plug.Conn
       import PhoenixAuthSandboxWeb.Gettext
+      import PhoenixAuthSandboxWeb.Auth, only: [ensure_authenticated: 2]
       alias PhoenixAuthSandboxWeb.Router.Helpers, as: Routes
     end
   end
@@ -47,6 +48,7 @@ defmodule PhoenixAuthSandboxWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import PhoenixAuthSandboxWeb.Auth, only: [ensure_authenticated: 2]
     end
   end
 

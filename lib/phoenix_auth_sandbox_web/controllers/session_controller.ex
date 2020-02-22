@@ -4,6 +4,7 @@ defmodule PhoenixAuthSandboxWeb.SessionController do
   alias PhoenixAuthSandboxWeb.Auth
 
   action_fallback PhoenixAuthSandboxWeb.FallbackController
+  plug :ensure_authenticated when action in [:delete]
 
   def create(conn, %{"session" => %{"username" => username, "password" => pass}}) do
     case PhoenixAuthSandbox.Accounts.check_users_pass(username, pass) do

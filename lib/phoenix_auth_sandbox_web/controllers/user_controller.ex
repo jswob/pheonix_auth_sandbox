@@ -5,6 +5,7 @@ defmodule PhoenixAuthSandboxWeb.UserController do
   alias PhoenixAuthSandbox.Accounts.User
 
   action_fallback PhoenixAuthSandboxWeb.FallbackController
+  plug :ensure_authenticated when action in [:update, :delete]
 
   def create(conn, %{"user" => user_params}) do
     with {:ok, %User{} = user} <- Accounts.register_user(user_params) do
