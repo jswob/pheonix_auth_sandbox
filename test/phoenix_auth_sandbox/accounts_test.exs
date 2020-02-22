@@ -15,13 +15,13 @@ defmodule PhoenixAuthSandbox.AccountsTest do
     @invalid_attrs %{name: nil, username: nil, password: nil}
 
     test "list_users/0 returns all users" do
-      user = user_fixture()
-      assert Accounts.list_users() == [user]
+      %User{id: id} = user_fixture()
+      assert [%User{id: ^id}] = Accounts.list_users()
     end
 
     test "get_user!/1 returns the user with given id" do
-      user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
+      %User{id: id} = user_fixture()
+      assert %User{id: ^id} = Accounts.get_user!(id)
     end
 
     test "create_user/1 with valid data creates a user" do
@@ -45,15 +45,16 @@ defmodule PhoenixAuthSandbox.AccountsTest do
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
+
       assert user.name == "some updated name"
       assert user.username == "updated username"
-      assert user.password == nil
+      assert user.password == "some updated password"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
-      user = user_fixture()
+      %User{id: id} = user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert user == Accounts.get_user!(user.id)
+      assert %User{id: ^id} = Accounts.get_user!(user.id)
     end
 
     test "delete_user/1 deletes the user" do

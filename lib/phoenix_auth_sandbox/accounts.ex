@@ -87,7 +87,7 @@ defmodule PhoenixAuthSandbox.Accounts do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> change_registration(attrs)
     |> Repo.update()
   end
 
