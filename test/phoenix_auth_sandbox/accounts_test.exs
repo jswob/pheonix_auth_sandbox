@@ -82,5 +82,31 @@ defmodule PhoenixAuthSandbox.AccountsTest do
       user = user_fixture()
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
+
+    test "change_registration/2 returns changed user changeset" do
+      user = user_fixture()
+
+      assert %Ecto.Changeset{
+               changes: %{
+                 name: "some updated name",
+                 username: "updated username",
+                 password: "some updated password"
+               }
+             } = Accounts.change_registration(user, @update_attrs)
+    end
+
+    test "check_users_pass/2 returns {:ok, %User{}} if params are correct" do
+      %User{id: id} = user = user_fixture()
+
+      assert {:ok, %User{id: ^id}} = Accounts.check_users_pass(user.username, "some password")
+    end
+
+    test "check_users_pass/2 returns {:error, _reason} if data are bad" do
+      user = user_fixture()
+
+      assert {:error, :unauthorized} = Accounts.check_users_pass(user.username, "bad password")
+
+      assert {:error, :not_found} = Accounts.check_users_pass("bad username", "some password")
+    end
   end
 end
