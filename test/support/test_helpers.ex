@@ -13,4 +13,16 @@ defmodule PhoenixAuthSandbox.TestHelpers do
 
     Accounts.get_user!(user.id)
   end
+
+  def banana_fixture(user, attrs \\ %{}) do
+    attrs =
+      Enum.into(attrs, %{
+        name: "some name",
+        color: "some color"
+      })
+
+    {:ok, banana} = PhoenixAuthSandbox.Fruits.create_banana(user, attrs)
+
+    banana
+  end
 end
