@@ -14,7 +14,7 @@ defmodule PhoenixAuthSandbox.Fruits.Banana do
   @doc false
   def changeset(banana, attrs) do
     banana
-    |> cast(attrs, [:name, :color, :user_id])
-    |> validate_required([:name, :color, :user_id])
+    |> cast(attrs, [:name, :color])
+    |> validate_required([:name, :color])
   end
 end
