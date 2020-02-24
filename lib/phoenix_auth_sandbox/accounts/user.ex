@@ -8,6 +8,8 @@ defmodule PhoenixAuthSandbox.Accounts.User do
     field :password, :string, virtual: true
     field :password_hash, :string
 
+    has_many :bananas, PhoenixAuthSandbox.Fruits.Banana
+
     timestamps()
   end
 
