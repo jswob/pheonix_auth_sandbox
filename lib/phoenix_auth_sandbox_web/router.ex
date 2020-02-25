@@ -14,4 +14,10 @@ defmodule PhoenixAuthSandboxWeb.Router do
     post "/sessions", SessionController, :create
     delete "/sessions", SessionController, :delete
   end
+
+  scope "/", PhoenixAuthSandboxWeb do
+    pipe_through [:api, :ensure_authenticated]
+
+    resources "/bananas", BananaController, exept: [:new, :edit]
+  end
 end
