@@ -1,4 +1,6 @@
 defmodule PhoenixAuthSandbox.TestHelpers do
+  import Plug.Conn
+
   alias PhoenixAuthSandbox.Accounts
 
   def user_fixture(attrs \\ %{}) do
@@ -24,5 +26,12 @@ defmodule PhoenixAuthSandbox.TestHelpers do
     {:ok, banana} = PhoenixAuthSandbox.Fruits.create_banana(user, attrs)
 
     banana
+  end
+
+  def setup_session(%{conn: conn}) do
+    user = user_fixture()
+    conn = assign(conn, :current_user, user)
+
+    {:ok, conn: conn, user: user}
   end
 end
